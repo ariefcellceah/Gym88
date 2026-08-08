@@ -1,0 +1,1891 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GYM88 - Dashboard Management Gym & System Settings</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- QR Code Generator -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<!-- HTML5 QR Code Scanner Library -->
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+tailwind.config = {
+darkMode: 'class',
+theme: {
+extend: {
+colors: {
+brand: {
+50: '#f0fdf4',
+100: '#dcfce7',
+500: '#22c55e',
+600: '#16a34a',
+700: '#15803d',
+800: '#166534',
+900: '#14532d',
+accent: '#f59e0b'
+}
+}
+}
+}
+}
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.3s, color 0.3s; }
+.custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
+#reader video { border-radius: 12px; object-fit: cover; }
+
+/* Theme Presets */
+body.theme-dark { background-color: #020617; color: #f8fafc; }
+body.theme-light { background-color: #f8fafc; color: #0f172a; }
+body.theme-neon { background-color: #050b14; color: #00ffcc; }
+
+/* Container Theme Overrides */
+body.theme-light .bg-slate-900 { background-color: #ffffff !important; border-color: #e2e8f0 !important; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+body.theme-light .bg-slate-950 { background-color: #f1f5f9 !important; }
+body.theme-light .bg-slate-800 { background-color: #f1f5f9 !important; border-color: #cbd5e1 !important; color: #1e293b !important; }
+body.theme-light .text-white { color: #0f172a !important; }
+body.theme-light .text-slate-100 { color: #1e293b !important; }
+body.theme-light .text-slate-300 { color: #334155 !important; }
+body.theme-light .text-slate-400 { color: #64748b !important; }
+body.theme-light .border-slate-800 { border-color: #e2e8f0 !important; }
+body.theme-light .border-slate-700 { border-color: #cbd5e1 !important; }
+
+body.theme-neon .bg-slate-900 { background-color: #0b1528 !important; border-color: #1e3a8a !important; }
+body.theme-neon .bg-slate-800 { background-color: #0f2342 !important; border-color: #2563eb !important; }
+body.theme-neon .text-brand-400 { color: #00ffcc !important; }
+
+/* Font Sizes */
+body.font-sm { font-size: 13px; }
+body.font-md { font-size: 15px; }
+body.font-lg { font-size: 17px; }
+
+/* Card Themes */
+.card-theme-darkgold { background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #14532d 100%); border-color: #334155; }
+.card-theme-cyberpunk { background: linear-gradient(135deg, #09090b 0%, #18181b 50%, #0284c7 100%); border-color: #38bdf8; }
+.card-theme-fire { background: linear-gradient(135deg, #18181b 0%, #27272a 50%, #991b1b 100%); border-color: #f87171; }
+.card-theme-ocean { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #1e40af 100%); border-color: #60a5fa; }
+.card-theme-lightclean { background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%); border-color: #cbd5e1; color: #0f172a !important; }
+</style>
+</head>
+<body class="theme-dark font-md min-h-screen flex flex-col md:flex-row antialiased custom-scrollbar">
+
+<!-- Header Mobile -->
+<div class="md:hidden bg-slate-900 border-b border-slate-800 p-4 flex justify-between items-center sticky top-0 z-50">
+<div class="flex items-center gap-3">
+<div id="mobileLogoHolder" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-amber-500 flex items-center justify-center font-black text-white text-xl shadow-lg shadow-brand-900/50 overflow-hidden">
+88
+</div>
+<span class="font-bold text-lg tracking-wider text-white" id="mobileGymName">GYM<span class="text-brand-500">88</span></span>
+</div>
+<button id="mobileMenuBtn" class="text-slate-400 hover:text-white p-2">
+<i class="fa-solid fa-bars text-xl"></i>
+</button>
+</div>
+
+<!-- Navigasi Sidebar -->
+<aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-slate-900 border-r border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between md:static md:inset-0">
+<div>
+<!-- Logo Aplikasi -->
+<div class="p-6 hidden md:flex items-center gap-3">
+<div id="sidebarLogoHolder" class="w-11 h-11 rounded-xl bg-gradient-to-tr from-brand-600 to-amber-500 flex items-center justify-center font-black text-white text-2xl shadow-lg shadow-brand-900/40 overflow-hidden">
+88
+</div>
+<div>
+<h1 class="font-extrabold text-xl tracking-wider text-white leading-tight" id="sidebarGymName">GYM<span class="text-brand-500">88</span></h1>
+<p class="text-xs text-slate-400 font-medium" id="sidebarGymTagline">Sistem Fitnes Profesional</p>
+</div>
+</div>
+
+<div class="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-slate-500 hidden md:block">Menu Utama</div>
+
+<!-- Tautan Navigasi -->
+<nav class="mt-2 px-3 space-y-1">
+<button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all duration-200 bg-brand-600 text-white shadow-lg shadow-brand-900/40">
+<i class="fa-solid fa-chart-pie text-lg w-5"></i>
+<span>Dashboard</span>
+</button>
+<button onclick="switchTab('scanner')" id="nav-scanner" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-all duration-200">
+<i class="fa-solid fa-qrcode text-lg w-5 text-amber-400"></i>
+<span class="text-amber-300 font-bold">Scan QR Presensi</span>
+</button>
+<button onclick="switchTab('member')" id="nav-member" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-all duration-200">
+<i class="fa-solid fa-users text-lg w-5"></i>
+<span>Data Member</span>
+<span id="badgeActiveCount" class="ml-auto bg-brand-500/20 text-brand-400 text-xs px-2 py-0.5 rounded-full font-bold">7</span>
+</button>
+<button onclick="switchTab('harian')" id="nav-harian" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-all duration-200">
+<i class="fa-solid fa-ticket text-lg w-5"></i>
+<span>Pengunjung Harian</span>
+</button>
+<button onclick="switchTab('keuangan')" id="nav-keuangan" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-all duration-200">
+<i class="fa-solid fa-wallet text-lg w-5"></i>
+<span>Arus Kas (Pemasukan)</span>
+</button>
+<button onclick="switchTab('paket')" id="nav-paket" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-all duration-200">
+<i class="fa-solid fa-tags text-lg w-5"></i>
+<span>Pengaturan Paket</span>
+</button>
+
+<div class="pt-4 px-1 pb-1 text-xs font-semibold uppercase tracking-wider text-slate-500">Konfigurasi</div>
+<button onclick="switchTab('pengaturan')" id="nav-pengaturan" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-all duration-200">
+<i class="fa-solid fa-gears text-lg w-5 text-blue-400"></i>
+<span class="text-blue-300 font-semibold">Pengaturan Sistem</span>
+</button>
+</nav>
+</div>
+
+<!-- Footbar Sidebar -->
+<div class="p-4 border-t border-slate-800/80">
+<div class="bg-slate-800/60 rounded-xl p-3 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div id="currentUserAvatar" class="w-8 h-8 rounded-full bg-brand-500/20 flex items-center justify-center text-brand-400 font-bold">
+<i class="fa-solid fa-user-shield text-sm"></i>
+</div>
+<div>
+<p class="text-xs font-semibold text-white" id="currentRoleLabel">Admin GYM</p>
+<p class="text-[10px] text-slate-400" id="currentSessionBadge">Login Sesi Aktif</p>
+</div>
+</div>
+<button onclick="openLoginModal()" title="Ganti Sesi Akun / Logout" class="text-slate-400 hover:text-amber-400 transition-colors p-1">
+<i class="fa-solid fa-right-from-bracket text-xs"></i>
+</button>
+</div>
+</div>
+</aside>
+
+<!-- Overlay Drawer Mobile -->
+<div id="sidebarOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 hidden md:hidden"></div>
+
+<!-- Wadah Konten Utama -->
+<main class="flex-1 flex flex-col min-w-0 overflow-y-auto custom-scrollbar">
+
+<!-- Header Atas -->
+<header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sticky top-0 z-20">
+<div>
+<h2 id="pageTitle" class="text-xl font-bold text-white tracking-tight">Dashboard Overview</h2>
+<p id="pageSubtitle" class="text-xs text-slate-400">Monitoring statistik dan transaksi GYM88 terkini</p>
+</div>
+
+<!-- Tombol Aksi Cepat -->
+<div class="flex items-center gap-3">
+<button onclick="switchTab('scanner')" class="bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold px-3.5 py-2 rounded-lg flex items-center gap-2 transition-all shadow-md shadow-amber-900/30">
+<i class="fa-solid fa-qrcode"></i>
+<span>Scan Kamera</span>
+</button>
+<button onclick="openAddMemberModal()" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-3.5 py-2 rounded-lg flex items-center gap-2 transition-all shadow-md shadow-brand-900/30">
+<i class="fa-solid fa-user-plus"></i>
+<span>Member Baru</span>
+</button>
+<div class="border-l border-slate-700 h-6 mx-1"></div>
+<div class="text-right text-xs text-slate-400 hidden lg:block" id="topbarStatsBox">
+<p class="font-medium text-slate-200" id="currentDateDisplay">--</p>
+<p class="text-[10px] text-brand-400">Sistem Aktif</p>
+</div>
+</div>
+</header>
+
+<!-- Dynamic Content View Holder -->
+<div class="p-6 space-y-6">
+
+<!-- TAB 1: DASHBOARD OVERVIEW -->
+<section id="tab-dashboard" class="tab-content space-y-6">
+<!-- Kartu KPI -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-slate-700 transition-all shadow-sm">
+<div class="flex items-center justify-between mb-3">
+<span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Pemasukan Hari Ini</span>
+<div class="w-10 h-10 rounded-xl bg-brand-500/10 text-brand-400 flex items-center justify-center">
+<i class="fa-solid fa-coins text-lg"></i>
+</div>
+</div>
+<div class="text-2xl font-extrabold text-white tracking-tight" id="kpiTodayIncome">Rp 1.800.000</div>
+<div class="mt-2 flex items-center text-xs text-brand-400 font-medium">
+<i class="fa-solid fa-circle-check mr-1 text-[10px]"></i>
+<span>Update real-time hari ini</span>
+</div>
+</div>
+
+<div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-slate-700 transition-all shadow-sm">
+<div class="flex items-center justify-between mb-3">
+<span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Member Aktif</span>
+<div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center">
+<i class="fa-solid fa-users-viewfinder text-lg"></i>
+</div>
+</div>
+<div class="text-2xl font-extrabold text-white tracking-tight" id="kpiActiveMember">7 Orang</div>
+<div class="mt-2 flex items-center text-xs text-slate-400 font-medium">
+<span class="text-slate-300" id="kpiTotalMember">Total 8 terdaftar</span>
+</div>
+</div>
+
+<div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-slate-700 transition-all shadow-sm">
+<div class="flex items-center justify-between mb-3">
+<span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Harian Bulan Ini</span>
+<div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center">
+<i class="fa-solid fa-ticket text-lg"></i>
+</div>
+</div>
+<div class="text-2xl font-extrabold text-white tracking-tight" id="kpiMonthlyHarian">Rp 1.140.000</div>
+<div class="mt-2 flex items-center text-xs text-amber-400 font-medium">
+<i class="fa-solid fa-user-check mr-1 text-[10px]"></i>
+<span id="kpiVisitorCount">76 Sesi Pengunjung</span>
+</div>
+</div>
+
+<div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-slate-700 transition-all shadow-sm">
+<div class="flex items-center justify-between mb-3">
+<span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Laba Bersih</span>
+<div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+<i class="fa-solid fa-vault text-lg"></i>
+</div>
+</div>
+<div class="text-2xl font-extrabold text-white tracking-tight" id="kpiNetProfit">Rp 1.800.000</div>
+<div class="mt-2 flex items-center text-xs text-slate-400 font-medium">
+<span>Pengeluaran: <strong class="text-slate-200" id="kpiTotalExpense">Rp 0</strong></span>
+</div>
+</div>
+</div>
+
+<!-- Baris Grafik -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between">
+<div class="flex items-center justify-between mb-4">
+<div>
+<h3 class="font-bold text-slate-100 text-base">Tren Tiket Harian (Agustus 2026)</h3>
+<p class="text-xs text-slate-400">Pemasukan sesi harian per tanggal</p>
+</div>
+<span class="bg-slate-800 text-xs text-slate-300 font-medium px-2.5 py-1 rounded-md border border-slate-700">Rp 15.000 / Sesi</span>
+</div>
+<div class="h-64 w-full">
+<canvas id="dailyChart"></canvas>
+</div>
+</div>
+
+<div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between">
+<div>
+<h3 class="font-bold text-slate-100 text-base mb-1">Status Keanggotaan</h3>
+<p class="text-xs text-slate-400 mb-4">Rasio member aktif vs expired</p>
+<div class="h-48 flex items-center justify-center relative">
+<canvas id="memberPieChart"></canvas>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-slate-800 grid grid-cols-2 text-center">
+<div class="border-r border-slate-800 pr-2">
+<p class="text-xs text-slate-400">Tarif Bulanan</p>
+<p class="font-bold text-slate-200 text-sm mt-0.5">Rp 200.000</p>
+</div>
+<div class="pl-2">
+<p class="text-xs text-slate-400">Tarif Harian</p>
+<p class="font-bold text-brand-400 text-sm mt-0.5">Rp 15.000</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Ringkasan Tabel Member Aktif -->
+<div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+<div>
+<h3 class="font-bold text-slate-100 text-base">Daftar Member Aktif Terbaru</h3>
+<p class="text-xs text-slate-400">Member yang terdaftar dan aktif melakukan latihan</p>
+</div>
+<button onclick="switchTab('member')" class="text-xs text-brand-400 hover:text-brand-300 font-medium flex items-center gap-1">
+<span>Lihat Semua Member</span>
+<i class="fa-solid fa-arrow-right text-[10px]"></i>
+</button>
+</div>
+
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm text-slate-300">
+<thead class="bg-slate-800/60 text-xs uppercase text-slate-400 font-semibold border-b border-slate-800">
+<tr>
+<th class="py-3 px-4">ID Member</th>
+<th class="py-3 px-4">Nama Lengkap</th>
+<th class="py-3 px-4">Paket</th>
+<th class="py-3 px-4">Mulai</th>
+<th class="py-3 px-4">Berakhir</th>
+<th class="py-3 px-4 text-center">Status</th>
+<th class="py-3 px-4 text-right">Aksi</th>
+</tr>
+</thead>
+<tbody id="dashMemberTableBody" class="divide-y divide-slate-800/60">
+<!-- Dynamic Rows -->
+</tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!-- TAB SCANNER QR CODE -->
+<section id="tab-scanner" class="tab-content hidden space-y-6">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col items-center text-center">
+<div class="w-full flex items-center justify-between mb-4">
+<h3 class="font-bold text-slate-100 text-base flex items-center gap-2">
+<i class="fa-solid fa-camera text-amber-400"></i>
+<span>Pemindai Kamera Real-time</span>
+</h3>
+<span class="text-xs text-slate-400 bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700">Auto Scan</span>
+</div>
+
+<div class="w-full bg-slate-950 rounded-xl border-2 border-dashed border-slate-700 p-2 overflow-hidden relative min-h-[260px] flex items-center justify-center">
+<div id="reader" class="w-full max-w-sm"></div>
+<div id="cameraPlaceholder" class="text-slate-500 space-y-2">
+<i class="fa-solid fa-qrcode text-5xl"></i>
+<p class="text-xs">Klik tombol di bawah untuk mengaktifkan kamera HP / Laptop</p>
+</div>
+</div>
+
+<div class="mt-4 flex flex-wrap gap-3 w-full justify-center">
+<button onclick="startCameraScanner()" class="bg-brand-600 hover:bg-brand-500 text-white font-semibold text-xs px-4 py-2.5 rounded-xl shadow-md flex items-center gap-2 transition-all">
+<i class="fa-solid fa-video"></i>
+<span>Mulai Kamera Scanner</span>
+</button>
+<button onclick="stopCameraScanner()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs px-4 py-2.5 rounded-xl border border-slate-700 flex items-center gap-2 transition-all">
+<i class="fa-solid fa-video-slash"></i>
+<span>Matikan Kamera</span>
+</button>
+</div>
+
+<div class="mt-6 pt-4 border-t border-slate-800 w-full text-left">
+<label class="block text-xs font-semibold text-slate-400 mb-1">Atau Ketik Manual ID Member (Cepat):</label>
+<div class="flex gap-2">
+<input type="text" id="manualScanInput" placeholder="Contoh: GYMO1" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-slate-100 font-mono focus:outline-none focus:border-amber-400">
+<button onclick="processManualScan()" class="bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold px-4 py-2 rounded-xl">
+Cek Status
+</button>
+</div>
+</div>
+</div>
+
+<div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
+<div>
+<h3 class="font-bold text-slate-100 text-base mb-4">Hasil Pindaian & Presensi</h3>
+
+<div id="scanResultIdle" class="text-center py-12 text-slate-500 space-y-3">
+<div class="w-16 h-16 rounded-full bg-slate-800/80 mx-auto flex items-center justify-center text-slate-600">
+<i class="fa-solid fa-address-card text-3xl"></i>
+</div>
+<p class="text-sm">Arahkan QR Code Kartu Member ke kamera<br>atau ketik ID untuk mengecek keabsahan paket.</p>
+</div>
+
+<div id="scanResultCard" class="hidden space-y-4">
+<div id="scanStatusBanner" class="p-4 rounded-xl flex items-center gap-3">
+<i id="scanStatusIcon" class="text-2xl"></i>
+<div>
+<p id="scanStatusTitle" class="font-extrabold text-sm uppercase"></p>
+<p id="scanStatusSubtitle" class="text-xs"></p>
+</div>
+</div>
+
+<div class="bg-slate-800/60 p-4 rounded-xl border border-slate-700 space-y-2 text-sm">
+<div class="flex justify-between border-b border-slate-700/60 pb-2">
+<span class="text-slate-400">ID Member:</span>
+<span id="scanResId" class="font-mono font-bold text-brand-400">--</span>
+</div>
+<div class="flex justify-between border-b border-slate-700/60 pb-2">
+<span class="text-slate-400">Nama Lengkap:</span>
+<span id="scanResNama" class="font-bold text-white">--</span>
+</div>
+<div class="flex justify-between border-b border-slate-700/60 pb-2">
+<span class="text-slate-400">Jenis Paket:</span>
+<span id="scanResPaket" class="capitalize font-semibold text-slate-200">--</span>
+</div>
+<div class="flex justify-between">
+<span class="text-slate-400">Masa Berlaku Berakhir:</span>
+<span id="scanResBerakhir" class="font-semibold text-amber-400">--</span>
+</div>
+</div>
+</div>
+</div>
+
+<div class="mt-6 pt-4 border-t border-slate-800">
+<h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Riwayat Presensi Masuk Hari Ini</h4>
+<div class="max-h-36 overflow-y-auto custom-scrollbar space-y-2" id="presensiLogContainer">
+<p class="text-xs text-slate-600 text-center py-2">Belum ada aktivitas presensi member hari ini.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- TAB 2: DATA MEMBER -->
+<section id="tab-member" class="tab-content hidden space-y-6">
+<div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col md:flex-row gap-4 justify-between items-center">
+<div class="relative w-full md:w-80">
+<i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+<input type="text" id="memberSearchInput" oninput="renderMemberTable()" placeholder="Cari nama atau ID member..." class="w-full bg-slate-800/80 border border-slate-700/80 rounded-xl pl-10 pr-4 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors">
+</div>
+
+<div class="flex items-center gap-3 w-full md:w-auto justify-end">
+<select id="memberStatusFilter" onchange="renderMemberTable()" class="bg-slate-800/80 border border-slate-700/80 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-500">
+<option value="ALL">Semua Status</option>
+<option value="Aktif">Aktif Saja</option>
+<option value="Expired">Expired Saja</option>
+</select>
+
+<button onclick="openAddMemberModal()" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-md">
+<i class="fa-solid fa-plus"></i>
+<span>Tambah Member</span>
+</button>
+</div>
+</div>
+
+<div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm text-slate-300">
+<thead class="bg-slate-800/80 text-xs uppercase text-slate-400 font-semibold border-b border-slate-800">
+<tr>
+<th class="py-3.5 px-4">ID</th>
+<th class="py-3.5 px-4">Nama Member</th>
+<th class="py-3.5 px-4">JK</th>
+<th class="py-3.5 px-4">Paket</th>
+<th class="py-3.5 px-4">Tanggal Mulai</th>
+<th class="py-3.5 px-4">Tanggal Expired</th>
+<th class="py-3.5 px-4 text-center">Status</th>
+<th class="py-3.5 px-4 text-center">Aksi & Kartu</th>
+</tr>
+</thead>
+<tbody id="fullMemberTableBody" class="divide-y divide-slate-800">
+<!-- Dynamic Member Rows -->
+</tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!-- TAB 3: HARIAN (TIKET HARIAN) -->
+<section id="tab-harian" class="tab-content hidden space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-gradient-to-br from-slate-900 to-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
+<div>
+<div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-4">
+<i class="fa-solid fa-bolt text-xl"></i>
+</div>
+<h3 class="text-lg font-bold text-white mb-1">Entry Tiket Harian Fast</h3>
+<p class="text-xs text-slate-400 mb-6">Catat pengunjung harian (Non-Member) senilai Rp 15.000 per sesi secara instan.</p>
+</div>
+
+<div class="space-y-3">
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">Tanggal Kunjungan</label>
+<input type="date" id="harianEntryDate" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100">
+</div>
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">Jumlah Pengunjung</label>
+<input type="number" id="harianEntryQty" value="1" min="1" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100">
+</div>
+<button onclick="addHarianRecord()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-semibold py-2.5 rounded-xl text-sm transition-all shadow-md shadow-amber-900/30 flex items-center justify-center gap-2">
+<i class="fa-solid fa-check-circle"></i>
+<span>Simpan Entry (+ Rp <span id="harianCalcTotal">15.000</span>)</span>
+</button>
+</div>
+</div>
+
+<div class="md:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between">
+<div class="flex items-center justify-between mb-4">
+<div>
+<h3 class="font-bold text-slate-100 text-base">Rekapitulasi Tiket Harian</h3>
+<p class="text-xs text-slate-400">Data penerimaan kas harian Gym</p>
+</div>
+</div>
+
+<div class="overflow-x-auto max-h-80 custom-scrollbar">
+<table class="w-full text-left text-sm text-slate-300">
+<thead class="bg-slate-800/80 text-xs uppercase text-slate-400 sticky top-0">
+<tr>
+<th class="py-2.5 px-4">Tanggal</th>
+<th class="py-2.5 px-4 text-center">Estimasi Orang</th>
+<th class="py-2.5 px-4 text-right">Total Pendapatan</th>
+</tr>
+</thead>
+<tbody id="harianTableBody" class="divide-y divide-slate-800">
+<!-- Dynamic rows -->
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+
+<!-- TAB 4: KEUANGAN (PEMASUKAN & PENGELUARAN) -->
+<section id="tab-keuangan" class="tab-content hidden space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+<span class="text-xs font-semibold text-slate-400 uppercase">Total Pemasukan (Member & Harian)</span>
+<div class="text-2xl font-extrabold text-brand-400 mt-2" id="finTotalIncome">Rp 0</div>
+</div>
+<div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+<span class="text-xs font-semibold text-slate-400 uppercase">Total Pengeluaran Operasional</span>
+<div class="text-2xl font-extrabold text-red-400 mt-2" id="finTotalExpense">Rp 0</div>
+</div>
+<div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+<span class="text-xs font-semibold text-slate-400 uppercase">Saldo Kas Bersih</span>
+<div class="text-2xl font-extrabold text-emerald-400 mt-2" id="finNetBalance">Rp 0</div>
+</div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+<h3 class="font-bold text-slate-100 text-base mb-4">Tambah Catatan Kas</h3>
+<form id="cashflowForm" onsubmit="saveCashflow(event)" class="space-y-4">
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">Tipe Transaksi</label>
+<select id="cfType" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100">
+<option value="Pemasukan">Pemasukan (+)</option>
+<option value="Pengeluaran">Pengeluaran (-)</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">Tanggal</label>
+<input type="date" id="cfDate" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100">
+</div>
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">Keterangan / Nama</label>
+<input type="text" id="cfDescription" placeholder="Contoh: Pembelian Suplemen / Kebersihan" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100">
+</div>
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">Nominal (Rp)</label>
+<input type="number" id="cfAmount" placeholder="200000" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100">
+</div>
+<button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-semibold py-2.5 rounded-xl text-sm transition-all shadow-md">
+Catat Transaksi
+</button>
+</form>
+</div>
+
+<div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between">
+<h3 class="font-bold text-slate-100 text-base mb-4">Riwayat Pemasukan Kas</h3>
+<div class="overflow-x-auto max-h-96 custom-scrollbar">
+<table class="w-full text-left text-sm text-slate-300">
+<thead class="bg-slate-800/80 text-xs uppercase text-slate-400 sticky top-0">
+<tr>
+<th class="py-2.5 px-4">Tanggal</th>
+<th class="py-2.5 px-4">Keterangan</th>
+<th class="py-2.5 px-4">Jenis</th>
+<th class="py-2.5 px-4 text-right">Nominal</th>
+</tr>
+</thead>
+<tbody id="pemasukanTableBody" class="divide-y divide-slate-800">
+<!-- Dynamic Rows -->
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+
+<!-- TAB 5: PENGATURAN PAKET GYM -->
+<section id="tab-paket" class="tab-content hidden space-y-6">
+<div class="max-w-2xl bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
+<div>
+<h3 class="text-lg font-bold text-white">Pengaturan Tarif Paket GYM88</h3>
+<p class="text-xs text-slate-400">Atur harga standar untuk keanggotaan bulanan dan tiket harian.</p>
+</div>
+
+<div class="space-y-4">
+<div class="p-4 bg-slate-800/50 rounded-xl border border-slate-700/60 flex items-center justify-between">
+<div>
+<p class="font-bold text-white text-sm">Paket Bulanan</p>
+<p class="text-xs text-slate-400">Akses gym full 30 hari + member card</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-slate-400 text-sm">Rp</span>
+<input type="number" id="paketBulananInput" value="200000" class="w-36 bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-sm font-bold text-brand-400">
+</div>
+</div>
+
+<div class="p-4 bg-slate-800/50 rounded-xl border border-slate-700/60 flex items-center justify-between">
+<div>
+<p class="font-bold text-white text-sm">Paket Tiket Harian</p>
+<p class="text-xs text-slate-400">Akses latihan 1 hari (Non-Member)</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-slate-400 text-sm">Rp</span>
+<input type="number" id="paketHarianInput" value="15000" class="w-36 bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-sm font-bold text-amber-400">
+</div>
+</div>
+
+<button onclick="savePaketSettings()" class="bg-brand-600 hover:bg-brand-500 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-all shadow-md">
+Simpan Perubahan Tarif
+</button>
+</div>
+</div>
+</section>
+
+<!-- TAB 6: MENU PENGATURAN LENGKAP -->
+<section id="tab-pengaturan" class="tab-content hidden space-y-6">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+<!-- SEKSI BRANDING LOGO & DESAIN KARTU -->
+<div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
+<div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+<div class="w-9 h-9 rounded-xl bg-brand-500/10 text-brand-400 flex items-center justify-center font-bold">
+<i class="fa-solid fa-id-card text-lg"></i>
+</div>
+<div>
+<h3 class="font-bold text-white text-base">Pengaturan Logo Gym & Desain Kartu Member</h3>
+<p class="text-xs text-slate-400">Kustomisasi logo gym, nama brand, serta tema kartu member cetak</p>
+</div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+<!-- Form Branding -->
+<div class="space-y-4">
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">Nama Brand Gym:</label>
+<input type="text" id="settingGymName" value="GYM88" placeholder="Contoh: GYM88 / FITNESS HUB" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-slate-100 font-bold" oninput="updateBrandingPreview()">
+</div>
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">Tagline Gym:</label>
+<input type="text" id="settingGymTagline" value="Professional Fitness System" placeholder="Slogan Gym Anda" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-slate-100" oninput="updateBrandingPreview()">
+</div>
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">Label Badge Kartu Member:</label>
+<input type="text" id="settingCardBadge" value="MEMBER PASS" placeholder="Misal: VIP MEMBER PASS" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-slate-100" oninput="updateBrandingPreview()">
+</div>
+
+<!-- Upload / Input Custom Logo -->
+<div class="space-y-2 pt-2 border-t border-slate-800">
+<label class="block text-xs font-semibold text-slate-400">Upload / Pakai File Logo Gambar:</label>
+<input type="file" id="logoFileInput" accept="image/*" onchange="handleLogoUpload(event)" class="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-brand-600 file:text-white hover:file:bg-brand-500 cursor-pointer">
+<p class="text-[10px] text-slate-500">Atau masukkan URL Gambar Logo:</p>
+<div class="flex gap-2">
+<input type="text" id="logoUrlInput" placeholder="https://example.com/logo.png" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-100">
+<button onclick="applyLogoUrl()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3 py-1.5 rounded-xl border border-slate-700">Terapkan</button>
+</div>
+</div>
+
+<!-- Pilihan Tema Kartu -->
+<div class="space-y-2 pt-2 border-t border-slate-800">
+<label class="block text-xs font-semibold text-slate-400">Pilih Tema Kartu Member:</label>
+<div class="grid grid-cols-2 gap-2">
+<button onclick="setCardTheme('card-theme-darkgold')" class="p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-left flex items-center justify-between hover:border-brand-500 transition-all">
+<span class="text-xs font-semibold text-white">Dark Gold Emerald</span>
+<div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+</button>
+<button onclick="setCardTheme('card-theme-cyberpunk')" class="p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-left flex items-center justify-between hover:border-sky-500 transition-all">
+<span class="text-xs font-semibold text-white">Cyber Sky Blue</span>
+<div class="w-3 h-3 rounded-full bg-sky-400"></div>
+</button>
+<button onclick="setCardTheme('card-theme-fire')" class="p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-left flex items-center justify-between hover:border-red-500 transition-all">
+<span class="text-xs font-semibold text-white">Red Fire Power</span>
+<div class="w-3 h-3 rounded-full bg-red-500"></div>
+</button>
+<button onclick="setCardTheme('card-theme-ocean')" class="p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-left flex items-center justify-between hover:border-blue-500 transition-all">
+<span class="text-xs font-semibold text-white">Metallic Ocean</span>
+<div class="w-3 h-3 rounded-full bg-blue-500"></div>
+</button>
+</div>
+</div>
+</div>
+
+<!-- Pratinjau Kartu Member Real-time -->
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-2">Pratinjau Kartu Member Cetak:</label>
+<div id="cardPreviewBox" class="card-theme-darkgold p-6 border rounded-2xl shadow-2xl text-center relative overflow-hidden transition-all duration-300">
+<div class="flex items-center justify-between border-b border-white/20 pb-3 mb-4">
+<div class="flex items-center gap-2">
+<div id="previewLogoHolder" class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-amber-500 flex items-center justify-center font-black text-white text-xs overflow-hidden">
+88
+</div>
+<span class="font-extrabold text-sm tracking-wider text-white" id="previewGymName">GYM88</span>
+</div>
+<span class="text-[10px] uppercase tracking-widest font-bold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-md" id="previewCardBadge">MEMBER PASS</span>
+</div>
+
+<div class="my-4 flex justify-center">
+<div class="p-2 bg-white rounded-xl shadow-md inline-block">
+<i class="fa-solid fa-qrcode text-5xl text-slate-900"></i>
+</div>
+</div>
+
+<div class="space-y-1">
+<h4 class="text-lg font-bold text-white tracking-wide uppercase">NAMA MEMBER SAMPLE</h4>
+<p class="text-xs font-mono text-amber-300 font-bold">ID: GYM88-01</p>
+</div>
+
+<div class="mt-4 pt-3 border-t border-white/20 grid grid-cols-2 text-left text-[11px]">
+<div>
+<p class="text-slate-300">Paket</p>
+<p class="font-semibold text-white">Bulanan Full</p>
+</div>
+<div class="text-right">
+<p class="text-slate-300">Berakhir</p>
+<p class="font-semibold text-amber-300">2026-09-01</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PENGATURAN TAMPILAN -->
+<div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5">
+<div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+<div class="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold">
+<i class="fa-solid fa-palette text-lg"></i>
+</div>
+<div>
+<h3 class="font-bold text-white text-base">Pengaturan Tampilan</h3>
+<p class="text-xs text-slate-400">Sesuaikan tema warna & tata letak aplikasi</p>
+</div>
+</div>
+
+<div class="space-y-2">
+<label class="block text-xs font-semibold text-slate-400">Pilih Tema Warna Aplikasi:</label>
+<div class="grid grid-cols-3 gap-3">
+<button onclick="setTheme('theme-dark')" class="p-3 bg-slate-950 border-2 border-brand-500 rounded-xl text-center space-y-1 hover:border-brand-400 transition-all">
+<div class="w-full h-5 bg-slate-900 rounded mb-1"></div>
+<span class="text-xs font-bold text-slate-200">Dark Mode</span>
+</button>
+<button onclick="setTheme('theme-light')" class="p-3 bg-slate-100 border-2 border-slate-300 rounded-xl text-center space-y-1 hover:border-brand-400 transition-all">
+<div class="w-full h-5 bg-white border border-slate-300 rounded mb-1"></div>
+<span class="text-xs font-bold text-slate-800">Light Mode</span>
+</button>
+<button onclick="setTheme('theme-neon')" class="p-3 bg-slate-950 border-2 border-cyan-500 rounded-xl text-center space-y-1 hover:border-cyan-400 transition-all">
+<div class="w-full h-5 bg-blue-950 rounded mb-1"></div>
+<span class="text-xs font-bold text-cyan-400">Cyber Neon</span>
+</button>
+</div>
+</div>
+
+<div class="space-y-2 pt-2 border-t border-slate-800">
+<label class="block text-xs font-semibold text-slate-400">Ukuran Teks / Font Size:</label>
+<div class="grid grid-cols-3 gap-3">
+<button onclick="setFontSize('font-sm')" class="py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl border border-slate-700">
+Kecil (Small)
+</button>
+<button onclick="setFontSize('font-md')" class="py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl border border-slate-700">
+Sedang (Normal)
+</button>
+<button onclick="setFontSize('font-lg')" class="py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl border border-slate-700">
+Besar (Large)
+</button>
+</div>
+</div>
+
+<div class="pt-2 border-t border-slate-800 flex items-center justify-between">
+<div>
+<p class="text-xs font-bold text-white">Ringkasan Statistik Topbar</p>
+<p class="text-[11px] text-slate-400">Tampilkan widget tanggal & status di header atas</p>
+</div>
+<input type="checkbox" id="toggleTopbarStats" checked onchange="toggleTopbarStatsWidget()" class="w-5 h-5 accent-brand-500 rounded cursor-pointer">
+</div>
+</div>
+
+<!-- PENGATURAN KATA SANDI & KEAMANAN -->
+<div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5">
+<div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+<div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold">
+<i class="fa-solid fa-key text-lg"></i>
+</div>
+<div>
+<h3 class="font-bold text-white text-base">Sandi Login Admin & Kasir</h3>
+<p class="text-xs text-slate-400">Kelola kredensial kata sandi akun manajemen</p>
+</div>
+</div>
+
+<form onsubmit="changePasswordSubmit(event)" class="space-y-4">
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">Pilih Akun yang Diubah:</label>
+<select id="passTargetRole" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-slate-100 font-semibold">
+<option value="Admin">Akun Admin (Akses Penuh)</option>
+<option value="Kasir">Akun Kasir (Operasional)</option>
+</select>
+</div>
+
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">Kata Sandi Lama:</label>
+<input type="password" id="passOld" required placeholder="Masukkan kata sandi lama" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-slate-100">
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">Kata Sandi Baru:</label>
+<input type="password" id="passNew" required placeholder="Sandi baru..." class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-slate-100">
+</div>
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">Konfirmasi Sandi Baru:</label>
+<input type="password" id="passConfirm" required placeholder="Ulangi sandi baru..." class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-slate-100">
+</div>
+</div>
+
+<button type="submit" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-semibold py-2.5 rounded-xl text-sm transition-all shadow-md shadow-amber-900/30 flex items-center justify-center gap-2">
+<i class="fa-solid fa-lock"></i>
+<span>Perbarui Kata Sandi</span>
+</button>
+</form>
+
+<div class="pt-3 border-t border-slate-800">
+<p class="text-xs text-slate-400 mb-2">Kata Sandi Default Bawaan Sistem:</p>
+<div class="bg-slate-800/60 p-3 rounded-xl border border-slate-700/80 text-xs space-y-1 font-mono text-slate-300">
+<p><span class="text-amber-400 font-bold">Admin Password:</span> <span id="dispAdminPass">admin88</span></p>
+<p><span class="text-brand-400 font-bold">Kasir Password:</span> <span id="dispKasirPass">kasir88</span></p>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+
+</div>
+</main>
+
+<!-- MODAL 1: TAMBAH / EDIT MEMBER -->
+<div id="modalMember" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+<div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl transform transition-all">
+<div class="bg-slate-800/80 px-6 py-4 border-b border-slate-700/80 flex justify-between items-center">
+<h3 class="font-bold text-white text-base" id="modalMemberTitle">Pendaftaran Member Baru</h3>
+<button onclick="closeModal('modalMember')" class="text-slate-400 hover:text-white p-1">
+<i class="fa-solid fa-xmark text-lg"></i>
+</button>
+</div>
+<form id="memberForm" onsubmit="saveMemberForm(event)" class="p-6 space-y-4">
+<input type="hidden" id="mIndex" value="-1">
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">ID Member</label>
+<input type="text" id="mId" placeholder="Misal: GYM08" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-slate-100 font-mono">
+</div>
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">Nama Lengkap</label>
+<input type="text" id="mNama" placeholder="Nama member..." required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-slate-100">
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">Jenis Kelamin</label>
+<select id="mJK" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100">
+<option value="L">Laki-laki (L)</option>
+<option value="P">Perempuan (P)</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">Jenis Paket</label>
+<select id="mPaket" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100">
+<option value="bulanan">Bulanan (Rp 200k)</option>
+<option value="harian">Harian</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">Tanggal Mulai</label>
+<input type="date" id="mMulai" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100">
+</div>
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">Tanggal Berakhir</label>
+<input type="date" id="mBerakhir" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100">
+</div>
+</div>
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">Status Keanggotaan</label>
+<select id="mStatus" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100">
+<option value="Aktif">Aktif</option>
+<option value="Expired">Expired</option>
+</select>
+</div>
+<div class="pt-2 flex items-center justify-end gap-3">
+<button type="button" onclick="closeModal('modalMember')" class="px-4 py-2 rounded-xl text-xs font-medium text-slate-400 hover:bg-slate-800">Batal</button>
+<button type="submit" id="btnSaveMember" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-5 py-2.5 rounded-xl shadow-md">Simpan Data Member</button>
+</div>
+</form>
+</div>
+</div>
+
+<!-- MODAL 2: KARTU MEMBER DIGITAL & QR CODE -->
+<div id="modalMemberCard" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+<div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl relative">
+<button onclick="closeModal('modalMemberCard')" class="absolute top-3 right-3 bg-slate-800 text-slate-300 hover:text-white rounded-full w-8 h-8 flex items-center justify-center z-10">
+<i class="fa-solid fa-xmark"></i>
+</button>
+
+<!-- Physical Card Mockup -->
+<div id="printableCard" class="card-theme-darkgold p-6 border rounded-2xl m-4 shadow-xl text-center relative overflow-hidden">
+<div class="flex items-center justify-between border-b border-white/20 pb-3 mb-4">
+<div class="flex items-center gap-2">
+<div id="modalCardLogoHolder" class="w-7 h-7 rounded-lg bg-gradient-to-tr from-brand-600 to-amber-500 flex items-center justify-center font-black text-white text-xs overflow-hidden">
+88
+</div>
+<span class="font-extrabold text-sm tracking-wider text-white" id="modalCardGymName">GYM88</span>
+</div>
+<span class="text-[10px] uppercase tracking-widest font-bold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-md" id="modalCardBadge">MEMBER PASS</span>
+</div>
+
+<div class="my-4 flex justify-center">
+<div id="qrcode" class="p-2 bg-white rounded-xl shadow-md inline-block"></div>
+</div>
+
+<div class="space-y-1">
+<h4 class="text-lg font-bold text-white tracking-wide uppercase" id="cardMemberName">PAOO</h4>
+<p class="text-xs font-mono text-amber-300 font-bold" id="cardMemberId">ID: GYMO1</p>
+</div>
+
+<div class="mt-4 pt-3 border-t border-white/20 grid grid-cols-2 text-left text-[11px]">
+<div>
+<p class="text-slate-300">Paket</p>
+<p class="font-semibold text-white capitalize" id="cardPackage">Bulanan</p>
+</div>
+<div class="text-right">
+<p class="text-slate-300">Berakhir</p>
+<p class="font-semibold text-amber-300" id="cardExpired">2026-09-01</p>
+</div>
+</div>
+</div>
+
+<div class="px-6 pb-6 pt-2 flex justify-center gap-3">
+<button onclick="window.print()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold py-2.5 rounded-xl border border-slate-700 flex items-center justify-center gap-2">
+<i class="fa-solid fa-print"></i>
+<span>Cetak Kartu</span>
+</button>
+</div>
+</div>
+</div>
+
+<!-- MODAL 3: LOGIN / GANTI SESI AKUN -->
+<div id="modalLogin" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+<div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl relative">
+<div class="p-6 border-b border-slate-800 text-center">
+<div class="w-12 h-12 bg-amber-500/10 text-amber-400 rounded-2xl flex items-center justify-center mx-auto mb-2 text-xl font-bold">
+<i class="fa-solid fa-shield-halved"></i>
+</div>
+<h3 class="font-extrabold text-white text-lg">Autentikasi Akses GYM88</h3>
+<p class="text-xs text-slate-400">Pilih role dan masukkan kata sandi untuk beralih akun</p>
+</div>
+
+<form onsubmit="handleLoginSubmit(event)" class="p-6 space-y-4">
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">Pilih Hak Akses Role:</label>
+<select id="loginRole" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-slate-100 font-bold">
+<option value="Admin">Admin (Akses Penuh Pengaturan)</option>
+<option value="Kasir">Kasir (Operasional Presensi)</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-semibold text-slate-400 mb-1">Kata Sandi Akses:</label>
+<input type="password" id="loginPassword" required placeholder="Masukkan kata sandi..." class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-slate-100">
+</div>
+<div class="pt-2 flex justify-end gap-2">
+<button type="button" onclick="closeModal('modalLogin')" class="px-4 py-2 rounded-xl text-xs font-medium text-slate-400 hover:bg-slate-800">Batal</button>
+<button type="submit" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-5 py-2.5 rounded-xl shadow-md">
+Masuk Ke Sesi
+</button>
+</div>
+</form>
+</div>
+</div>
+
+<!-- Script Aplikasi Logic -->
+<script>
+// Data Awal CSV
+const DEFAULT_MEMBERS = [
+{ id: 'GYMO1', nama: 'PAOO', hp: '', jk: 'L', daftar: '', paket: 'bulanan', mulai: '2026-08-01', berakhir: '2026-09-01', status: 'Aktif' },
+{ id: 'GYMO2', nama: 'IKSAN', hp: '', jk: 'L', daftar: '', paket: 'bulanan', mulai: '2026-08-02', berakhir: '2026-09-02', status: 'Aktif' },
+{ id: 'GYM03', nama: 'DEFA', hp: '', jk: 'L', daftar: '', paket: 'bulanan', mulai: '2026-08-02', berakhir: '2026-09-02', status: 'Aktif' },
+{ id: 'GYM04', nama: 'BAYU', hp: '', jk: 'L', daftar: '', paket: 'bulanan', mulai: '2026-08-02', berakhir: '2026-09-02', status: 'Aktif' },
+{ id: 'GYM05', nama: 'AKSA', hp: '', jk: 'L', daftar: '', paket: 'bulanan', mulai: '2026-08-03', berakhir: '2026-09-03', status: 'Aktif' },
+{ id: 'GYMO6', nama: 'RIDWAN', hp: '', jk: 'L', daftar: '', paket: 'bulanan', mulai: '2026-08-04', berakhir: '2026-09-04', status: 'Aktif' },
+{ id: 'GYMO7', nama: 'UMAR', hp: '', jk: 'L', daftar: '', paket: 'bulanan', mulai: '2026-08-05', berakhir: '2026-09-05', status: 'Aktif' },
+{ id: 'GYM08', nama: 'JALI', hp: '', jk: 'L', daftar: '', paket: 'bulanan', mulai: '2026-05-07', berakhir: '2026-05-08', status: 'Expired' }
+ ];
+
+const DEFAULT_HARIAN = [
+{ date: '2026-08-01', nominal: 195000 },
+{ date: '2026-08-02', nominal: 225000 },
+{ date: '2026-08-03', nominal: 105000 },
+{ date: '2026-08-04', nominal: 135000 },
+{ date: '2026-08-05', nominal: 195000 },
+{ date: '2026-08-06', nominal: 120000 },
+{ date: '2026-08-07', nominal: 165000 }
+ ];
+
+const DEFAULT_PEMASUKAN = [
+{ date: '2026-01-08', nama: 'Member Auto', jenis: 'Member', keterangan: 'pendaftaran member', nominal: 200000 },
+{ date: '2026-02-08', nama: 'Member Auto', jenis: 'Member', keterangan: 'pendaftaran member', nominal: 200000 },
+{ date: '2026-02-08', nama: 'Member Auto', jenis: 'Member', keterangan: 'pendaftaran member', nominal: 200000 },
+{ date: '2026-02-08', nama: 'Member Auto', jenis: 'Member', keterangan: 'pendaftaran member', nominal: 200000 },
+{ date: '2026-03-08', nama: 'Member Auto', jenis: 'Member', keterangan: 'pendaftaran member', nominal: 200000 },
+{ date: '2026-04-08', nama: 'Member Auto', jenis: 'Member', keterangan: 'pendaftaran member', nominal: 200000 },
+{ date: '2026-05-08', nama: 'Member Auto', jenis: 'Member', keterangan: 'pendaftaran member', nominal: 200000 },
+{ date: '2026-07-08', nama: 'Member Auto', jenis: 'Member', keterangan: 'pendaftaran member', nominal: 200000 },
+{ date: '2026-07-08', nama: 'Member Auto', jenis: 'Member', keterangan: 'pendaftaran member', nominal: 200000 }
+ ];
+
+// State Global
+let membersData = [...DEFAULT_MEMBERS];
+let harianData = [...DEFAULT_HARIAN];
+let pemasukanData = [...DEFAULT_PEMASUKAN];
+let pengeluaranData = [];
+let presensiLogs = [];
+let paketPrices = { bulanan: 200000, harian: 15000 };
+
+// Branding & Custom Card Settings State
+let gymBranding = {
+name: "GYM88",
+tagline: "Professional Fitness System",
+badge: "MEMBER PASS",
+logoUrl: null,
+cardThemeClass: "card-theme-darkgold"
+};
+
+// Password & Authentication State
+let currentRole = 'Admin';
+let passwords = {
+Admin: 'admin88',
+Kasir: 'kasir88'
+};
+
+let chartDaily = null;
+let chartMemberPie = null;
+let html5QrCodeScanner = null;
+
+window.onload = function() {
+setTodayDates();
+updateAllViews();
+initMobileMenu();
+};
+
+function setTodayDates() {
+const todayStr = new Date().toISOString().split('T')[0];
+document.getElementById('currentDateDisplay').textContent = new Date().toLocaleDateString('id-ID', {
+weekday: 'long', year: 'numeric', month: 'short', day: 'numeric'
+});
+document.getElementById('harianEntryDate').value = todayStr;
+document.getElementById('cfDate').value = todayStr;
+document.getElementById('mMulai').value = todayStr;
+
+const nextMonth = new Date();
+nextMonth.setDate(nextMonth.getDate() + 30);
+document.getElementById('mBerakhir').value = nextMonth.toISOString().split('T')[0];
+}
+
+function formatRupiah(number) {
+return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(number);
+}
+
+function updateAllViews() {
+renderDashboardStats();
+renderMemberTable();
+renderHarianTable();
+renderPemasukanTable();
+initCharts();
+updateBrandingPreview();
+}
+
+// --- MANAJEMEN LOGO & BRANDING GYM ---
+function updateBrandingPreview() {
+const name = document.getElementById('settingGymName').value || 'GYM88';
+const tagline = document.getElementById('settingGymTagline').value || 'Professional Fitness System';
+const badge = document.getElementById('settingCardBadge').value || 'MEMBER PASS';
+
+gymBranding.name = name;
+gymBranding.tagline = tagline;
+gymBranding.badge = badge;
+
+// Update UI Sidebar & Mobile Header
+document.getElementById('sidebarGymName').innerHTML = ${name}; document.getElementById('mobileGymName').innerHTML = ``${name};
+document.getElementById('sidebarGymTagline').textContent = tagline;
+
+// Update Card Preview & Modals
+document.getElementById('previewGymName').textContent = name;
+document.getElementById('previewCardBadge').textContent = badge;
+document.getElementById('modalCardGymName').textContent = name;
+document.getElementById('modalCardBadge').textContent = badge;
+}
+
+function setCardTheme(className) {
+gymBranding.cardThemeClass = className;
+
+const cardBox = document.getElementById('cardPreviewBox');
+const modalCard = document.getElementById('printableCard');
+
+cardBox.className = ${className} p-6 border rounded-2xl shadow-2xl text-center relative overflow-hidden transition-all duration-300; modalCard.className = ``${className} p-6 border rounded-2xl m-4 shadow-xl text-center relative overflow-hidden;
+}
+
+function handleLogoUpload(event) {
+const file = event.target.files[0];
+if (file) {
+const reader = new FileReader();
+reader.onload = function(e) {
+gymBranding.logoUrl = e.target.result;
+applyLogoToAllHolders(e.target.result);
+}
+reader.readAsDataURL(file);
+}
+}
+
+function applyLogoUrl() {
+const url = document.getElementById('logoUrlInput').value.trim();
+if(url) {
+gymBranding.logoUrl = url;
+applyLogoToAllHolders(url);
+}
+}
+
+function applyLogoToAllHolders(imageSrc) {
+const imgHtml = <img src="${imageSrc}" class="w-full h-full object-cover rounded-xl" alt="Gym Logo">`;
+
+document.getElementById('sidebarLogoHolder').innerHTML = imgHtml;
+document.getElementById('mobileLogoHolder').innerHTML = imgHtml;
+document.getElementById('previewLogoHolder').innerHTML = imgHtml;
+document.getElementById('modalCardLogoHolder').innerHTML = imgHtml;
+}
+
+// --- PENGATURAN TAMPILAN (THEME & FONT) ---
+function setTheme(themeName) {
+document.body.classList.remove('theme-dark', 'theme-light', 'theme-neon');
+document.body.classList.add(themeName);
+}
+
+function setFontSize(fontSizeName) {
+document.body.classList.remove('font-sm', 'font-md', 'font-lg');
+document.body.classList.add(fontSizeName);
+}
+
+function toggleTopbarStatsWidget() {
+const isChecked = document.getElementById('toggleTopbarStats').checked;
+const widget = document.getElementById('topbarStatsBox');
+if(isChecked) {
+widget.classList.remove('hidden');
+} else {
+widget.classList.add('hidden');
+}
+}
+
+// --- PENGATURAN KATA SANDI & AKSES LOGIN ---
+function changePasswordSubmit(e) {
+e.preventDefault();
+const roleTarget = document.getElementById('passTargetRole').value;
+const oldPass = document.getElementById('passOld').value;
+const newPass = document.getElementById('passNew').value;
+const confirmPass = document.getElementById('passConfirm').value;
+
+if (oldPass !== passwords[roleTarget]) {
+alert(Kata sandi lama untuk${roleTarget} salah!`);
+return;
+}
+
+if (newPass !== confirmPass) {
+alert("Konfirmasi kata sandi baru tidak cocok!");
+return;
+}
+
+if (newPass.length < 4) {
+alert("Kata sandi minimal 4 karakter.");
+return;
+}
+
+passwords[roleTarget] = newPass;
+
+if(roleTarget === 'Admin') {
+document.getElementById('dispAdminPass').textContent = newPass;
+} else {
+document.getElementById('dispKasirPass').textContent = newPass;
+}
+
+document.getElementById('passOld').value = '';
+document.getElementById('passNew').value = '';
+document.getElementById('passConfirm').value = '';
+
+alert(Kata sandi akun ${roleTarget} berhasil diperbarui!`);
+}
+
+function openLoginModal() {
+openModal('modalLogin');
+}
+
+function handleLoginSubmit(e) {
+e.preventDefault();
+const role = document.getElementById('loginRole').value;
+const pass = document.getElementById('loginPassword').value;
+
+if (pass === passwords[role]) {
+currentRole = role;
+document.getElementById('currentRoleLabel').textContent = ``${role} GYM; document.getElementById('loginPassword').value = ''; closeModal('modalLogin'); alert(Berhasil beralih ke sesi akun: ${role});
+} else {
+alert("Kata sandi yang Anda masukkan salah!");
+}
+}
+
+// Tab Switcher
+function switchTab(tabId) {
+document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+document.querySelectorAll('.nav-item').forEach(el => {
+el.classList.remove('bg-brand-600', 'text-white', 'shadow-lg', 'shadow-brand-900/40');
+el.classList.add('text-slate-400', 'hover:bg-slate-800');
+});
+
+document.getElementById(tab-${tabId}).classList.remove('hidden'); const activeNav = document.getElementById(nav-${tabId});
+if (activeNav) {
+activeNav.classList.add('bg-brand-600', 'text-white', 'shadow-lg', 'shadow-brand-900/40');
+activeNav.classList.remove('text-slate-400', 'hover:bg-slate-800');
+}
+
+const titles = {
+dashboard: ['Dashboard Overview', 'Monitoring statistik dan transaksi GYM88 terkini'],
+scanner: ['Scan QR Code Kehadiran', 'Pindai kartu member digital untuk mencatat kehadiran latihan'],
+member: ['Manajemen Member', 'Kelola daftar keanggotaan gym & buat kartu member'],
+harian: ['Pendapatan Tiket Harian', 'Pencatatan sesi latihan pengunjung harian (Non-Member)'],
+keuangan: ['Manajemen Arus Kas', 'Catat pemasukan dan pengeluaran operasional gym'],
+paket: ['Pengaturan Paket Gym', 'Konfigurasi harga & fasilitas membership'],
+pengaturan: ['Pengaturan Sistem & Branding', 'Kustomisasi logo gym, desain kartu member, tema & sandi akun']
+};
+
+if (titles[tabId]) {
+document.getElementById('pageTitle').textContent = titles[tabId][0];
+document.getElementById('pageSubtitle').textContent = titles[tabId][1];
+}
+
+if(tabId !== 'scanner') {
+stopCameraScanner();
+}
+
+closeMobileMenu();
+}
+
+function initMobileMenu() {
+const btn = document.getElementById('mobileMenuBtn');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('sidebarOverlay');
+
+btn.addEventListener('click', () => {
+sidebar.classList.toggle('-translate-x-full');
+overlay.classList.toggle('hidden');
+});
+
+overlay.addEventListener('click', closeMobileMenu);
+}
+
+function closeMobileMenu() {
+document.getElementById('sidebar').classList.add('-translate-x-full');
+document.getElementById('sidebarOverlay').classList.add('hidden');
+}
+
+// --- MANAJEMEN QR CODE SCANNER & CAMERA ---
+function startCameraScanner() {
+document.getElementById('cameraPlaceholder').classList.add('hidden');
+if (html5QrCodeScanner) {
+stopCameraScanner();
+}
+
+html5QrCodeScanner = new Html5Qrcode("reader");
+const config = { fps: 10, qrbox: { width: 220, height: 220 } };
+
+html5QrCodeScanner.start(
+{ facingMode: "environment" },
+config,
+onScanSuccess,
+onScanFailure
+).catch(err => {
+alert("Gagal mengakses kamera: " + err + "\nPastikan Anda memberikan izin kamera.");
+document.getElementById('cameraPlaceholder').classList.remove('hidden');
+});
+}
+
+function stopCameraScanner() {
+if (html5QrCodeScanner) {
+html5QrCodeScanner.stop().then(() => {
+html5QrCodeScanner.clear();
+html5QrCodeScanner = null;
+document.getElementById('cameraPlaceholder').classList.remove('hidden');
+}).catch(err => console.log(err));
+}
+}
+
+function onScanSuccess(decodedText) {
+let idSearch = decodedText;
+if(decodedText.includes(':')) {
+const parts = decodedText.split(':');
+idSearch = parts[1] || decodedText;
+}
+
+processScannedMember(idSearch);
+}
+
+function onScanFailure(error) {}
+
+function processManualScan() {
+const val = document.getElementById('manualScanInput').value.trim();
+if(!val) {
+alert("Masukkan ID Member terlebih dahulu!");
+return;
+}
+processScannedMember(val);
+}
+
+function processScannedMember(rawId) {
+const id = rawId.trim().toUpperCase();
+const member = membersData.find(m => m.id.toUpperCase() === id || m.nama.toUpperCase() === id);
+
+const idleEl = document.getElementById('scanResultIdle');
+const cardEl = document.getElementById('scanResultCard');
+const banner = document.getElementById('scanStatusBanner');
+const icon = document.getElementById('scanStatusIcon');
+const title = document.getElementById('scanStatusTitle');
+const subtitle = document.getElementById('scanStatusSubtitle');
+
+idleEl.classList.add('hidden');
+cardEl.classList.remove('hidden');
+
+if (member) {
+document.getElementById('scanResId').textContent = member.id;
+document.getElementById('scanResNama').textContent = member.nama;
+document.getElementById('scanResPaket').textContent = member.paket;
+document.getElementById('scanResBerakhir').textContent = member.berakhir || '-';
+
+const now = new Date();
+const expDate = new Date(member.berakhir);
+
+if (member.status === 'Aktif' && (isNaN(expDate.getTime()) || expDate >= now)) {
+banner.className = "p-4 rounded-xl flex items-center gap-3 bg-emerald-500/20 border border-emerald-500/40 text-emerald-300";
+icon.className = "fa-solid fa-circle-check text-2xl text-emerald-400";
+title.textContent = "MEMBERSHIP AKTIF - AKSES DITERIMA";
+subtitle.textContent = "Member diizinkan masuk untuk latihan hari ini.";
+
+addPresensiLog(member.id, member.nama, true);
+} else {
+banner.className = "p-4 rounded-xl flex items-center gap-3 bg-red-500/20 border border-red-500/40 text-red-300";
+icon.className = "fa-solid fa-circle-xmark text-2xl text-red-400";
+title.textContent = "MEMBERSHIP KADALUARSA / EXPIRED";
+subtitle.textContent = "Silakan melakukan perpanjangan paket membership terlebih dahulu.";
+
+addPresensiLog(member.id, member.nama, false);
+}
+} else {
+banner.className = "p-4 rounded-xl flex items-center gap-3 bg-amber-500/20 border border-amber-500/40 text-amber-300";
+icon.className = "fa-solid fa-triangle-exclamation text-2xl text-amber-400";
+title.textContent = "DATA MEMBER TIDAK DITEMUKAN";
+subtitle.textContent = ID atau QR Code "${rawId}" tidak terdaftar dalam sistem GYM88.`;
+
+document.getElementById('scanResId').textContent = rawId;
+document.getElementById('scanResNama').textContent = "Tidak Dikenal";
+document.getElementById('scanResPaket').textContent = "-";
+document.getElementById('scanResBerakhir').textContent = "-";
+}
+}
+
+function addPresensiLog(id, nama, isSuccess) {
+const timeStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+presensiLogs.unshift({ id, nama, isSuccess, time: timeStr });
+
+const container = document.getElementById('presensiLogContainer');
+container.innerHTML = '';
+
+presensiLogs.forEach(log => {
+const badge = log.isSuccess
+? <span class="text-xs text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20"&gt;Masuk&lt;/span>
+: <span class="text-xs text-red-400 font-bold bg-red-500/10 px-2 py-0.5 rounded border border-red-500/20"&gt;Ditolak&lt;/span>;
+
+container.innerHTML += &lt;div class="bg-slate-800/50 p-2.5 rounded-lg border border-slate-700/60 flex items-center justify-between text-xs"&gt; &lt;div class="flex items-center gap-2"&gt; &lt;span class="font-mono text-slate-400"&gt;${log.time}</span>
+<span class="font-bold text-white">${log.nama}&lt;/span&gt; &lt;span class="font-mono text-brand-400"&gt;(${log.id})</span>
+</div>
+<div>${badge}&lt;/div&gt; &lt;/div&gt;;
+});
+}
+
+// Render KPI Dashboard
+function renderDashboardStats() {
+const activeMembers = membersData.filter(m => m.status === 'Aktif').length;
+const totalMembers = membersData.length;
+
+const totalHarianNominal = harianData.reduce((acc, curr) => acc + (curr.nominal || 0), 0);
+const totalHarianVisitors = Math.round(totalHarianNominal / paketPrices.harian);
+
+const totalMemberIncome = membersData.length * paketPrices.bulanan;
+const totalPemasukan = totalHarianNominal + totalMemberIncome;
+const totalPengeluaran = pengeluaranData.reduce((acc, curr) => acc + curr.nominal, 0);
+
+document.getElementById('kpiTodayIncome').textContent = formatRupiah(1800000);
+document.getElementById('kpiActiveMember').textContent = ${activeMembers} Orang; document.getElementById('badgeActiveCount').textContent = activeMembers; document.getElementById('kpiTotalMember').textContent =Total ${totalMembers} Terdaftar;
+document.getElementById('kpiMonthlyHarian').textContent = formatRupiah(totalHarianNominal);
+document.getElementById('kpiVisitorCount').textContent = ${totalHarianVisitors} Sesi Pengunjung`;
+document.getElementById('kpiNetProfit').textContent = formatRupiah(totalPemasukan - totalPengeluaran);
+document.getElementById('kpiTotalExpense').textContent = formatRupiah(totalPengeluaran);
+
+document.getElementById('finTotalIncome').textContent = formatRupiah(totalPemasukan);
+document.getElementById('finTotalExpense').textContent = formatRupiah(totalPengeluaran);
+document.getElementById('finNetBalance').textContent = formatRupiah(totalPemasukan - totalPengeluaran);
+
+const tbody = document.getElementById('dashMemberTableBody');
+tbody.innerHTML = '';
+membersData.filter(m => m.status === 'Aktif').slice(0, 5).forEach(m => {
+tbody.innerHTML += &lt;tr class="hover:bg-slate-800/40 transition-colors"&gt; &lt;td class="py-3 px-4 font-mono font-semibold text-brand-400 text-xs"&gt;${m.id}</td>
+<td class="py-3 px-4 font-bold text-white">{m.paket}</td>
+<td class="py-3 px-4 text-xs text-slate-400">{m.berakhir || '-'}</td>
+<td class="py-3 px-4 text-center">
+<span class="bg-emerald-500/10 text-emerald-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-emerald-500/20">Aktif</span>
+</td>
+<td class="py-3 px-4 text-right">
+<button onclick="openCardModal('${m.id}')" class="text-xs text-slate-300 hover:text-amber-400 bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700"&gt; &lt;i class="fa-solid fa-qrcode mr-1"&gt;&lt;/i&gt; Kartu &lt;/button&gt; &lt;/td&gt; &lt;/tr&gt;;
+});
+}
+
+// Render Tabel Member
+function renderMemberTable() {
+const tbody = document.getElementById('fullMemberTableBody');
+const search = document.getElementById('memberSearchInput').value.toLowerCase();
+const statusFilter = document.getElementById('memberStatusFilter').value;
+
+tbody.innerHTML = '';
+
+const filtered = membersData.filter(m => {
+const matchSearch = m.nama.toLowerCase().includes(search) || m.id.toLowerCase().includes(search);
+const matchStatus = statusFilter === 'ALL' || m.status === statusFilter;
+return matchSearch && matchStatus;
+});
+
+if(filtered.length === 0) {
+tbody.innerHTML = &lt;tr&gt; &lt;td colspan="8" class="text-center py-8 text-slate-500 text-xs"&gt; Tidak ada data member yang sesuai. &lt;/td&gt; &lt;/tr&gt;;
+return;
+}
+
+filtered.forEach((m) => {
+const isAktif = m.status === 'Aktif';
+const statusBadge = isAktif
+? <span class="bg-emerald-500/10 text-emerald-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-emerald-500/20"&gt;Aktif&lt;/span>
+: <span class="bg-red-500/10 text-red-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-red-500/20"&gt;Expired&lt;/span>;
+
+tbody.innerHTML += &lt;tr class="hover:bg-slate-800/40 transition-colors"&gt; &lt;td class="py-3.5 px-4 font-mono font-semibold text-brand-400 text-xs"&gt;${m.id}</td>
+<td class="py-3.5 px-4 font-bold text-white">{m.jk || 'L'}</td>
+<td class="py-3.5 px-4 capitalize text-xs">{m.mulai || '-'}</td>
+<td class="py-3.5 px-4 text-xs text-slate-400">{statusBadge}</td>
+<td class="py-3.5 px-4 text-center">
+<div class="flex items-center justify-center gap-1.5">
+<button onclick="editMember('{m.id}')" title="Lihat Kartu Member" class="p-1.5 bg-slate-800 hover:bg-slate-700 text-amber-400 rounded-lg border border-slate-700 transition-colors">
+<i class="fa-solid fa-qrcode text-sm"></i>
+</button>
+<button onclick="renewMemberById('{m.id}')" title="Hapus Member" class="p-1.5 bg-slate-800 hover:bg-slate-700 text-red-400 rounded-lg border border-slate-700 transition-colors">
+<i class="fa-solid fa-trash text-sm"></i>
+</button>
+</div>
+</td>
+</tr>
+`;
+});
+}
+
+// --- MANAJEMEN TAMBAH & EDIT MEMBER ---
+function openAddMemberModal() {
+document.getElementById('memberForm').reset();
+document.getElementById('mIndex').value = "-1";
+document.getElementById('modalMemberTitle').textContent = "Pendaftaran Member Baru";
+document.getElementById('btnSaveMember').textContent = "Simpan Data Member";
+setTodayDates();
+openModal('modalMember');
+}
+
+function editMember(memberId) {
+const index = membersData.findIndex(m => m.id === memberId);
+if (index === -1) return;
+
+const m = membersData[index];
+document.getElementById('mIndex').value = index;
+document.getElementById('modalMemberTitle').textContent = Edit Data Member (${m.id})`;
+document.getElementById('btnSaveMember').textContent = "Perbarui Member";
+
+document.getElementById('mId').value = m.id;
+document.getElementById('mNama').value = m.nama;
+document.getElementById('mJK').value = m.jk || 'L';
+document.getElementById('mPaket').value = m.paket || 'bulanan';
+document.getElementById('mMulai').value = m.mulai || '';
+document.getElementById('mBerakhir').value = m.berakhir || '';
+document.getElementById('mStatus').value = m.status || 'Aktif';
+
+openModal('modalMember');
+}
+
+function saveMemberForm(e) {
+e.preventDefault();
+const editIndex = parseInt(document.getElementById('mIndex').value);
+const id = document.getElementById('mId').value.trim();
+const nama = document.getElementById('mNama').value.trim();
+const jk = document.getElementById('mJK').value;
+const paket = document.getElementById('mPaket').value;
+const mulai = document.getElementById('mMulai').value;
+const berakhir = document.getElementById('mBerakhir').value;
+const status = document.getElementById('mStatus').value;
+
+if (editIndex >= 0 && editIndex < membersData.length) {
+// Modus Edit Data
+membersData[editIndex] = {
+...membersData[editIndex],
+id, nama, jk, paket, mulai, berakhir, status
+};
+alert(Data Member${nama} (${id}) berhasil diperbarui!);
+} else {
+// Modus Tambah Baru
+const newMember = { id, nama, hp: '', jk, daftar: mulai, paket, mulai, berakhir, status };
+membersData.unshift(newMember);
+
+if (status === 'Aktif') {
+pemasukanData.unshift({
+date: mulai,
+nama: nama,
+jenis: 'Member',
+keterangan: Pendaftaran Member${nama} (latex
+{id})`, nominal: paketPrices.bulanan }); } alert(`Member 
+
+{nama} berhasil ditambahkan!`);
+}
+
+closeModal('modalMember');
+updateAllViews();
+}
+
+function renewMemberById(memberId) {
+const member = membersData.find(m => m.id === memberId);
+if(!member) return;
+
+const todayStr = new Date().toISOString().split('T')[0];
+const nextMonth = new Date();
+nextMonth.setDate(nextMonth.getDate() + 30);
+
+member.mulai = todayStr;
+member.berakhir = nextMonth.toISOString().split('T')[0];
+member.status = 'Aktif';
+
+pemasukanData.unshift({
+date: todayStr,
+nama: member.nama,
+jenis: 'Member',
+keterangan: Perpanjangan Member ${member.nama}`,
+nominal: paketPrices.bulanan
+});
+
+updateAllViews();
+alert(Keanggotaan${member.nama} berhasil diperpanjang 30 hari!`);
+}
+
+function deleteMemberById(memberId) {
+const index = membersData.findIndex(m => m.id === memberId);
+if (index !== -1 && confirm("Apakah Anda yakin ingin menghapus data member ini?")) {
+membersData.splice(index, 1);
+updateAllViews();
+}
+}
+
+function renderHarianTable() {
+const tbody = document.getElementById('harianTableBody');
+tbody.innerHTML = '';
+
+harianData.forEach(h => {
+const visitorEst = Math.round((h.nominal || 0) / paketPrices.harian);
+tbody.innerHTML += &lt;tr class="hover:bg-slate-800/40 transition-colors"&gt; &lt;td class="py-2.5 px-4 font-mono text-xs text-slate-300"&gt;${h.date}</td>
+<td class="py-2.5 px-4 text-center font-medium text-slate-200">${visitorEst} Orang&lt;/td&gt; &lt;td class="py-2.5 px-4 text-right font-bold text-amber-400"&gt;${formatRupiah(h.nominal || 0)}</td>
+</tr>
+`;
+});
+}
+
+function renderPemasukanTable() {
+const tbody = document.getElementById('pemasukanTableBody');
+tbody.innerHTML = '';
+
+pemasukanData.forEach(p => {
+tbody.innerHTML += &lt;tr class="hover:bg-slate-800/40 transition-colors"&gt; &lt;td class="py-2.5 px-4 font-mono text-xs text-slate-400"&gt;${p.date}</td>
+<td class="py-2.5 px-4 font-medium text-white">{p.jenis || 'Member'}</td>
+<td class="py-2.5 px-4 text-right font-bold text-brand-400">${formatRupiah(p.nominal)}&lt;/td&gt; &lt;/tr&gt;;
+});
+}
+
+function addHarianRecord() {
+const date = document.getElementById('harianEntryDate').value;
+const qty = parseInt(document.getElementById('harianEntryQty').value) || 1;
+const totalNominal = qty * paketPrices.harian;
+
+if(!date) {
+alert("Pilih tanggal terlebih dahulu!");
+return;
+}
+
+const existing = harianData.find(h => h.date === date);
+if(existing) {
+existing.nominal += totalNominal;
+} else {
+harianData.unshift({ date: date, nominal: totalNominal });
+}
+
+pemasukanData.unshift({
+date: date,
+nama: 'Pengunjung Harian Batch',
+jenis: 'Harian',
+keterangan: Tiket Harian x${qty}`,
+nominal: totalNominal
+});
+
+updateAllViews();
+alert(Entry ${qty} pengunjung (${formatRupiah(totalNominal)}) berhasil disimpan!);
+}
+
+function saveCashflow(e) {
+e.preventDefault();
+const type = document.getElementById('cfType').value;
+const date = document.getElementById('cfDate').value;
+const desc = document.getElementById('cfDescription').value;
+const amount = parseFloat(document.getElementById('cfAmount').value) || 0;
+
+if(type === 'Pemasukan') {
+pemasukanData.unshift({ date: date, nama: 'Manual', jenis: 'Lainnya', keterangan: desc, nominal: amount });
+} else {
+pengeluaranData.unshift({ date: date, kategori: 'Operasional', keterangan: desc, nominal: amount });
+}
+
+document.getElementById('cashflowForm').reset();
+setTodayDates();
+updateAllViews();
+alert("Catatan kas berhasil tersimpan!");
+}
+
+function savePaketSettings() {
+const bulanan = parseFloat(document.getElementById('paketBulananInput').value) || 200000;
+const harian = parseFloat(document.getElementById('paketHarianInput').value) || 15000;
+
+paketPrices.bulanan = bulanan;
+paketPrices.harian = harian;
+
+document.getElementById('harianCalcTotal').textContent = harian.toLocaleString('id-ID');
+updateAllViews();
+alert("Pengaturan tarif paket gym berhasil diperbarui!");
+}
+
+function openCardModal(memberId) {
+const member = membersData.find(m => m.id === memberId);
+if(!member) return;
+
+document.getElementById('cardMemberName').textContent = member.nama;
+document.getElementById('cardMemberId').textContent = ID: ${member.id}`;
+document.getElementById('cardPackage').textContent = member.paket;
+document.getElementById('cardExpired').textContent = member.berakhir || '-';
+
+const qrContainer = document.getElementById('qrcode');
+qrContainer.innerHTML = '';
+new QRCode(qrContainer, {
+text: ``${gymBranding.name}:{member.nama}`,
+width: 100,
+height: 100,
+colorDark : "#0f172a",
+colorLight : "#ffffff",
+correctLevel : QRCode.CorrectLevel.H
+});
+
+openModal('modalMemberCard');
+}
+
+function openModal(id) {
+document.getElementById(id).classList.remove('hidden');
+}
+
+function closeModal(id) {
+document.getElementById(id).classList.add('hidden');
+}
+
+function resetDataToDefault() {
+if(confirm("Kembalikan seluruh data ke awal file CSV?")) {
+membersData = JSON.parse(JSON.stringify(DEFAULT_MEMBERS));
+harianData = JSON.parse(JSON.stringify(DEFAULT_HARIAN));
+pemasukanData = JSON.parse(JSON.stringify(DEFAULT_PEMASUKAN));
+pengeluaranData = [];
+updateAllViews();
+}
+}
+
+// Grafik
+function initCharts() {
+const dailyCtx = document.getElementById('dailyChart').getContext('2d');
+const dailyLabels = harianData.map(h => h.date);
+const dailyValues = harianData.map(h => h.nominal || 0);
+
+if(chartDaily) chartDaily.destroy();
+
+chartDaily = new Chart(dailyCtx, {
+type: 'line',
+data: {
+labels: dailyLabels,
+datasets: [{
+label: 'Pendapatan Harian (Rp)',
+data: dailyValues,
+borderColor: '#22c55e',
+backgroundColor: 'rgba(34, 197, 94, 0.12)',
+borderWidth: 3,
+fill: true,
+tension: 0.35,
+pointBackgroundColor: '#22c55e',
+pointRadius: 4
+}]
+},
+options: {
+responsive: true,
+maintainAspectRatio: false,
+plugins: {
+legend: { display: false },
+tooltip: {
+callbacks: {
+label: function(context) {
+return Total: ${formatRupiah(context.parsed.y)};
+}
+}
+}
+},
+scales: {
+x: {
+grid: { display: false },
+ticks: { color: '#64748b', font: { size: 10 } }
+},
+y: {
+grid: { color: '#1e293b' },
+ticks: {
+color: '#64748b',
+font: { size: 10 },
+callback: function(val) { return 'Rp ' + (val/1000) + 'k'; }
+}
+}
+}
+}
+});
+
+const pieCtx = document.getElementById('memberPieChart').getContext('2d');
+const activeCount = membersData.filter(m => m.status === 'Aktif').length;
+const expiredCount = membersData.filter(m => m.status === 'Expired').length;
+
+if(chartMemberPie) chartMemberPie.destroy();
+
+chartMemberPie = new Chart(pieCtx, {
+type: 'doughnut',
+data: {
+labels: ['Member Aktif', 'Expired'],
+datasets: [{
+data: [activeCount, expiredCount],
+backgroundColor: ['#22c55e', '#ef4444'],
+borderWidth: 0,
+hoverOffset: 4
+}]
+},
+options: {
+responsive: true,
+maintainAspectRatio: false,
+plugins: {
+legend: {
+position: 'bottom',
+labels: { color: '#cbd5e1', font: { size: 11 }, padding: 15 }
+}
+},
+cutout: '70%'
+}
+});
+}
+</script>
+</body>
+</html>
+<!-- ... KODE DASHBOARD / ELEMEN DOKUMEN ANDA SEBELUMNYA ... -->
+
+<!-- =================================================== -->
+<!-- 1. PUSTAKA EXTERNAL (CDN) -->
+<!-- =================================================== -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<!-- =================================================== -->
+<!-- 2. ELEMEN TAMPILAN (UI SCANNER & SIDIK JARI) -->
+<!-- =================================================== -->
+<div class="scanner-section" style="margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
+<h3>Presensi Member (QR Code & Sidik Jari)</h3>
+<div style="display: flex; gap: 10px; margin-bottom: 15px;">
+<button onclick="startQRScanner()" style="padding: 10px 15px; cursor: pointer;">📷 Scan QR Code</button>
+<button onclick="scanFingerprint()" style="padding: 10px 15px; cursor: pointer;">👆 Presensi Sidik Jari</button>
+</div>
+<div id="qr-reader" style="width: 100%; max-width: 400px; display: none;"></div>
+<p id="scan-result" style="font-weight: bold; margin-top: 10px;"></p>
+</div>
+
+<!-- =================================================== -->
+<!-- 3. LOGIKA SKRIP (JAVASCRIPT) -->
+<!-- =================================================== -->
+<script>
+// Kunci Firebase Anda
+const firebaseConfig = {
+apiKey: "API_KEY_FIREBASE_ANDA",
+authDomain: "PROJECT_ANDA.firebaseapp.com",
+projectId: "PROJECT_ANDA",
+storageBucket: "PROJECT_ANDA.appspot.com",
+messagingSenderId: "123456789",
+appId: "1:123456789:web:abc123def"
+};
+
+// Inisialisasi Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+let html5QrcodeScanner;
+
+// Logika QR Code
+function startQRScanner() {
+const qrRegion = document.getElementById("qr-reader");
+qrRegion.style.display = "block";
+
+if (!html5QrcodeScanner) {
+html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", { fps: 10, qrbox: 250 });
+}
+
+html5QrcodeScanner.render((decodedText) => {
+document.getElementById("scan-result").innerText = "QR Terdeteksi: ID " + decodedText;
+processAttendance(decodedText, "QR Code");
+html5QrcodeScanner.clear();
+qrRegion.style.display = "none";
+}, (error) => {});
+}
+
+// Logika Sidik Jari
+async function scanFingerprint() {
+const resultElement = document.getElementById("scan-result");
+resultElement.innerText = "Silakan sentuh sensor sidik jari di perangkat Anda...";
+
+if (!window.PublicKeyCredential) {
+alert("Perangkat belum mendukung autentikasi sidik jari.");
+return;
+}
+
+try {
+const credential = await navigator.credentials.get({
+publicKey: {
+challenge: new Uint8Array([1, 2, 3, 4]),
+timeout: 60000,
+userVerification: "required"
+}
+});
+
+if (credential) {
+resultElement.innerText = "Sidik Jari Terverifikasi!";
+processAttendance("MEMBER-FINGERPRINT-ID", "Sidik Jari");
+}
+} catch (err) {
+resultElement.innerText = "Verifikasi Sidik Jari Dibatalkan.";
+}
+}
+
+// Menyimpan Presensi ke Cloud
+function processAttendance(memberId, method) {
+const attendanceData = {
+memberId: memberId,
+method: method,
+timestamp: new Date().toISOString()
+};
+
+db.collection("attendance").add(attendanceData).then(() => {
+alert(Presensi via ${method} berhasil tersimpan ke cloud!);
+});
+}
+</script>
+
+<!-- TAG PENUTUP DOKUMEN -->
+</body>
+</html>
